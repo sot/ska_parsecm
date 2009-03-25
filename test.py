@@ -15,7 +15,7 @@ class Tests(unittest.TestCase):
 
     def test_15_read_mm(self):
         mms = Ska.ParseCM.read_mm('/data/mpcrit1/mplogs/2009/MAR0209/oflsc/mps/mm059_2310.sum')
-        self.assertEqual(mms[0]['initial']['obsid'], '10870')
+        self.assertEqual(mms[0]['initial']['obsid'], 10870)
 
     def test_20_read_2008_mms(self):
         for mmfile in glob.glob('/data/mpcrit1/mplogs/2008/*/ofls/mps/mm*.sum'):

@@ -1,10 +1,25 @@
 import Chandra.Time
 import re
-import numpy as np
+
+def _coerce_type(val):
+    """Coerce the supplied ``val`` (typically a string) into an int or float if
+    possible, otherwise as a string.
+    """
+    try:
+        val = int(val)
+    except ValueError:
+        try:
+            val = float(val)
+        except ValueError:
+            val = str(val)
+    return val
 
 def parse_params(paramstr):
     """
     Parse parameters key1=val1,key2=val2,... from ``paramstr``
+
+    Parameter values are cast to the first type (int, float, or str) that
+    succeeds.
 
     :param paramstr: Comma separated string of key=val pairs
     :rtype: dict of key=val pairs
@@ -13,7 +28,8 @@ def parse_params(paramstr):
     for opt in paramstr.split(','):
         try:
             key, val = opt.split('=')
-            params[key.strip()] = val.strip()
+            val = val.strip()
+            params[key.strip()] = _coerce_type(val)
         except:
             pass  # backstop has some quirks like blank or '??????' fields
 
@@ -93,7 +109,6 @@ def read_mm(filename):
                        'angle':  re.compile("Maneuver Angle\s*\(deg\):\s+(\S+)"),
                        }
 
-
     manvr_list = []
 
     for entry in manvr_blocks:
@@ -111,11 +126,10 @@ def read_mm(filename):
         att_text = { 'initial': att_chunks[0],
                      'final': att_chunks[1] }
 
-        output = {}
         for att in att_text.keys():
             manvr[att] = {}
             for keytype in att_re_dict.keys():
-                if (att_re_dict[keytype].search(att_text[att]) is None):
+                if att_re_dict[keytype].search(att_text[att]) is None:
                     if (keytype == 'obsid'):
                         # use intermediate attitude label for missing
                         manvr[att][keytype] = int_obsid
@@ -123,16 +137,12 @@ def read_mm(filename):
                         raise ValueError("Maneuver has no obsid")
                 else:
                     match = att_re_dict[keytype].search(att_text[att])
-                    manvr[att][keytype] = match.group(1)
+                    manvr[att][keytype] = _coerce_type(match.group(1))
                 if (keytype == 'quat_string'):
-                    manvr[att]['quat'] = np.array([ float(s) for s in match.groups()[1:]])
-            # strip out leading zeros in obsids
-            manvr[att]['obsid'] = re.sub('^0+', '', manvr[att]['obsid'])
-                                         
-        for keytype in output_re_dict.keys():
-            output[keytype] = output_re_dict[keytype].search(output_data).group(1)
+                    manvr[att]['quat'] = [float(s) for s in match.groups()[1:]]
 
-            
+        for keytype in output_re_dict.keys():
+            manvr[keytype] = _coerce_type(output_re_dict[keytype].search(output_data).group(1))
 
         manvr['tstart'] = Chandra.Time.DateTime(manvr['initial']['time']).secs
         manvr['tstop'] = Chandra.Time.DateTime(manvr['final']['time']).secs
