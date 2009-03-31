@@ -39,23 +39,40 @@ def read_backstop(filename):
     """
     Read commands from backstop file.
 
-    Create dict with keys ``date, vcdu, cmd, params, paramstr, time, file``
-    for each command.  ``paramstr`` is the actual string with comma-separated
-    parameters and ``params`` is the corresponding dict of key=val pairs.
+    Create dict with keys as follows for each command.  ``paramstr`` is the
+    actual string with comma-separated parameters and ``params`` is the
+    corresponding dict of key=val pairs.
+
+    ========= ======
+    date      char
+    time      float
+    cmd       char
+    params    dict
+    paramstr  char
+    tlmsid    char
+    msid      char
+    vcdu      int 
+    step      int 
+    scs       int 
+    ========= ======
 
     :param filename: Backstop file name
-    :rtype: list of dict for each command
+    :returns: list of dict for each command
     """
     bs = []
     for bs_line in open(filename):
         date, vcdu, cmd, paramstr = [x.strip() for x in bs_line.split('|')]
+        params = parse_params(paramstr)
         bs.append({'date': date,
-                   'vcdu': vcdu.split()[0], # ignore 2nd part of vcdu field
-                   'cmd' : cmd,
-                   'params' : parse_params(paramstr),
-                   'paramstr' : paramstr,
                    'time' : Chandra.Time.DateTime(date).secs,
-                   'file' : filename
+                   'cmd' : cmd,
+                   'params' : params,
+                   'paramstr' : paramstr,
+                   'tlmsid': params.get('TLMSID'),
+                   'msid': params.get('MSID'),
+                   'vcdu': int(vcdu.split()[0]), # ignore 2nd part of vcdu field
+                   'step': params.get('STEP'),
+                   'scs': params.get('SCS'),
                    })
     return bs
 
