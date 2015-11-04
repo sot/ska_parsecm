@@ -1,5 +1,6 @@
-import Chandra.Time
 import re
+import numpy as np
+import Chandra.Time
 
 def _coerce_type(val):
     """Coerce the supplied ``val`` (typically a string) into an int or float if
@@ -172,4 +173,28 @@ def read_mm(filename):
     return manvr_list
 
 
+def read_si_align(char_file):
+    """
+    Read ODB_SI_ALIGN matrices from supplied characteristics file
 
+    :param char_file: OFLS ODB characteristics file
+    :returns: dictionary of matrices, one per detector in original Fortran order
+    """
+    char_lines = open(char_file).readlines()
+    # Find the beginning of the assignment using the regex from aimpoint_mon
+    RE_ODB_SI_ALIGN = re.compile(r'\s* ODB_SI_ALIGN \s* =', re.VERBOSE)
+    matches = [i for i, line in enumerate(char_lines) if RE_ODB_SI_ALIGN.match(line)]
+    if len(matches) != 1:
+        raise ValueError('parsing error, matched {} instances of ODB_SI_ALIGN instead of one'
+                         .format(len(matches)))
+    start = matches[0]
+    # Grab the 12 lines of the alignment.  This assumes no extra blank lines
+    odb_si_lines = char_lines[start:start+12]
+    # Matching the values using a simple comma/space pattern with very little checking
+    odb_strings = [list(re.search("(\S+),\s(\S+),\s(\S+),", line).groups()) for line in odb_si_lines]
+    odb_floats = np.array(odb_strings).astype(float)
+    si_align = {'ACIS-I': odb_floats[0:3],
+                'ACIS-S': odb_floats[3:6],
+                'HRC-I': odb_floats[6:9],
+                'HRC-S': odb_floats[9:12]}
+    return si_align
