@@ -178,7 +178,7 @@ def read_si_align(char_file):
     Read ODB_SI_ALIGN matrices from supplied characteristics file
 
     :param char_file: OFLS ODB characteristics file
-    :returns: dictionary of matrices, one per detector in original Fortran order
+    :returns: dictionary of matrices, one per detector in C/Python order
     """
     char_lines = open(char_file).readlines()
     # Find the beginning of the assignment using the regex from aimpoint_mon
@@ -193,8 +193,10 @@ def read_si_align(char_file):
     # Matching the values using a simple comma/space pattern with very little checking
     odb_strings = [list(re.search("(\S+),\s(\S+),\s(\S+),", line).groups()) for line in odb_si_lines]
     odb_floats = np.array(odb_strings).astype(float)
-    si_align = {'ACIS-I': odb_floats[0:3],
-                'ACIS-S': odb_floats[3:6],
-                'HRC-I': odb_floats[6:9],
-                'HRC-S': odb_floats[9:12]}
+    # Return each 3 line piece for each detector.  Transpose to go from Fortran to C/Python
+    # expected matrix order
+    si_align = {'ACIS-I': odb_floats[0:3].transpose(),
+                'ACIS-S': odb_floats[3:6].transpose(),
+                'HRC-I': odb_floats[6:9].transpose(),
+                'HRC-S': odb_floats[9:12].transpose()}
     return si_align
