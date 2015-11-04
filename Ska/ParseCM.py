@@ -191,7 +191,8 @@ def read_si_align(char_file):
     # Grab the 12 lines of the alignment.  This assumes no extra blank lines
     odb_si_lines = char_lines[start:start+12]
     # Matching the values using a simple comma/space pattern with very little checking
-    odb_strings = [list(re.search("(\S+),\s(\S+),\s(\S+),", line).groups()) for line in odb_si_lines]
+    odb_strings = [list(re.search("(\S+)\s* , \s*(\S+)\s* , \s*(\S+)\s* ,", line, re.VERBOSE).groups())
+                   for line in odb_si_lines]
     odb_floats = np.array(odb_strings).astype(float)
     # Return each 3 line piece for each detector.  Transpose to go from Fortran to C/Python
     # expected matrix order
