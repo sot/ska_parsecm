@@ -190,6 +190,12 @@ def read_si_align(char_file):
     start = matches[0]
     # Grab the 12 lines of the alignment.  This assumes no extra blank lines
     odb_si_lines = char_lines[start:start+12]
+    # Remove ODB_SI_ALIGN label
+    odb_si_lines[0] = re.sub(RE_ODB_SI_ALIGN, "", odb_si_lines[0])
+    # Remove comments that begin with an exclamation mark
+    odb_si_lines = [re.sub("!.*$", "", line) for line in odb_si_lines]
+    # Remove leading and trailing whitespace
+    odb_si_lines = [line.strip() for line in odb_si_lines]
     # Matching the values using a simple comma/space pattern with very little checking
     odb_strings = [list(re.search("(\S+)\s* , \s*(\S+)\s* , \s*(\S+)\s* ,", line, re.VERBOSE).groups())
                    for line in odb_si_lines]
