@@ -1,6 +1,9 @@
 import Chandra.Time
 import re
 
+__version__ = '0.3.1'
+
+
 def _coerce_type(val):
     """Coerce the supplied ``val`` (typically a string) into an int or float if
     possible, otherwise as a string.
