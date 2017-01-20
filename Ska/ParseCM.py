@@ -1,7 +1,8 @@
 import Chandra.Time
 import re
+from six.moves import filter
 
-__version__ = '0.3.1'
+__version__ = '3.3.1'
 
 
 def _coerce_type(val):
@@ -136,11 +137,11 @@ def read_mm(filename):
 
         para = entry.split( "\n\n" )
         att_check = re.compile("ATTITUDE")
-        att_chunks = filter( att_check.search, para)
+        att_chunks = list(filter(att_check.search, para))
         if (len(att_chunks) > 2):
             raise ValueError("Maneuver Summary has too many attitudes in section")
         outdata_check = re.compile("OUTPUT DATA")
-        outdata_match = filter( outdata_check.search, para)
+        outdata_match = list(filter( outdata_check.search, para))
         output_data = outdata_match[0]
         
         att_text = { 'initial': att_chunks[0],
