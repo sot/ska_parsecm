@@ -2,7 +2,9 @@ import Chandra.Time
 import re
 from six.moves import filter
 
-__version__ = '3.3.1'
+import ska_helpers
+
+__version__ = ska_helpers.get_version(__package__)
 
 
 def _coerce_type(val):
