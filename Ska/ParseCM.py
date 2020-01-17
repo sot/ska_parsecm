@@ -4,7 +4,7 @@ from six.moves import filter
 
 import ska_helpers
 
-__version__ = ska_helpers.get_version(__package__)
+__version__ = ska_helpers.get_version(__name__)
 
 
 def _coerce_type(val):
