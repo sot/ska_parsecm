@@ -1,6 +1,11 @@
 import Chandra.Time
 import re
 from six.moves import filter
+import warnings
+
+# Warn about deprecation but use FutureWarning so it actually shows up (since
+# DeprecationWarning is ignored by default)
+warnings.warn('Ska.ParseCM is deprecated, use parse_cm instead', FutureWarning)
 
 import ska_helpers
 
@@ -57,9 +62,9 @@ def read_backstop(filename):
     paramstr  char
     tlmsid    char
     msid      char
-    vcdu      int 
-    step      int 
-    scs       int 
+    vcdu      int
+    step      int
+    scs       int
     ========= ======
 
     :param filename: Backstop file name
@@ -116,7 +121,7 @@ def read_mm(filename):
     mm_text = open(filename).read()
     mm_blocks = mm_text.split("MANEUVER DATA SUMMARY\n")
     manvr_blocks = [x for x in mm_blocks if "INITIAL" in x or "FINAL" in x]
-    
+
     int_obsid = 'IN_IA'
 
     att_re_dict = { 'obsid': re.compile("ID:\s+(\S+)\S\S"),
@@ -145,7 +150,7 @@ def read_mm(filename):
         outdata_check = re.compile("OUTPUT DATA")
         outdata_match = list(filter( outdata_check.search, para))
         output_data = outdata_match[0]
-        
+
         att_text = { 'initial': att_chunks[0],
                      'final': att_chunks[1] }
 
