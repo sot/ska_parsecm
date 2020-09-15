@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ska.ParseCM &#8212; Ska.ParseCM 3.3.5.dev7+ga3309ae documentation</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-astropy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script type="text/javascript" src="../../_static/sidebar.js"></script>
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="../../index.html"><span id="logotext1">Ska! </span><span id="logotext2">Ska</span><span id="logotext3">.ParseCM</span></a>
+  <ul>
+    
+    <li><a class="home" title="Homepage" href="">
+        <span id="logotext1"></span><span id="logotext2"></span>
+    </a></li>
+    <li><a title="General Index" href="../../genindex.html">Index</a></li>
+    <li><a title="Module Index" href="../../py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="../../index.html">Ska.ParseCM 3.3.5.dev7+ga3309ae documentation</a>
+	 &#187;
+      </li>
+      <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for Ska.ParseCM</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">Chandra.Time</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">filter</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="c1"># Warn about deprecation but use FutureWarning so it actually shows up (since</span>
+<span class="c1"># DeprecationWarning is ignored by default)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Ska.ParseCM is deprecated, use parse_cm instead&#39;</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
+
+<span class="kn">import</span> <span class="nn">ska_helpers</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="n">ska_helpers</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_coerce_type</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Coerce the supplied ``val`` (typically a string) into an int or float if</span>
+<span class="sd">    possible, otherwise as a string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">val</span>
+
+<div class="viewcode-block" id="parse_params"><a class="viewcode-back" href="../../index.html#Ska.ParseCM.parse_params">[docs]</a><span class="k">def</span> <span class="nf">parse_params</span><span class="p">(</span><span class="n">paramstr</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse parameters key1=val1,key2=val2,... from ``paramstr``</span>
+
+<span class="sd">    Parameter values are cast to the first type (int, float, or str) that</span>
+<span class="sd">    succeeds.</span>
+
+<span class="sd">    :param paramstr: Comma separated string of key=val pairs</span>
+<span class="sd">    :rtype: dict of key=val pairs</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">opt</span> <span class="ow">in</span> <span class="n">paramstr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="o">=</span> <span class="n">opt</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">params</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">strip</span><span class="p">()]</span> <span class="o">=</span> <span class="n">_coerce_type</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>  <span class="c1"># backstop has some quirks like blank or &#39;??????&#39; fields</span>
+
+    <span class="k">return</span> <span class="n">params</span></div>
+
+<div class="viewcode-block" id="read_backstop"><a class="viewcode-back" href="../../index.html#Ska.ParseCM.read_backstop">[docs]</a><span class="k">def</span> <span class="nf">read_backstop</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read commands from backstop file.</span>
+
+<span class="sd">    Create dict with keys as follows for each command.  ``paramstr`` is the</span>
+<span class="sd">    actual string with comma-separated parameters and ``params`` is the</span>
+<span class="sd">    corresponding dict of key=val pairs.</span>
+
+<span class="sd">    ========= ======</span>
+<span class="sd">    date      char</span>
+<span class="sd">    time      float</span>
+<span class="sd">    cmd       char</span>
+<span class="sd">    params    dict</span>
+<span class="sd">    paramstr  char</span>
+<span class="sd">    tlmsid    char</span>
+<span class="sd">    msid      char</span>
+<span class="sd">    vcdu      int</span>
+<span class="sd">    step      int</span>
+<span class="sd">    scs       int</span>
+<span class="sd">    ========= ======</span>
+
+<span class="sd">    :param filename: Backstop file name</span>
+<span class="sd">    :returns: list of dict for each command</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">bs_line</span> <span class="ow">in</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+        <span class="n">date</span><span class="p">,</span> <span class="n">vcdu</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">paramstr</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">bs_line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">parse_params</span><span class="p">(</span><span class="n">paramstr</span><span class="p">)</span>
+        <span class="n">bs</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="n">date</span><span class="p">,</span>
+                   <span class="s1">&#39;time&#39;</span> <span class="p">:</span> <span class="n">Chandra</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">date</span><span class="p">)</span><span class="o">.</span><span class="n">secs</span><span class="p">,</span>
+                   <span class="s1">&#39;cmd&#39;</span> <span class="p">:</span> <span class="n">cmd</span><span class="p">,</span>
+                   <span class="s1">&#39;params&#39;</span> <span class="p">:</span> <span class="n">params</span><span class="p">,</span>
+                   <span class="s1">&#39;paramstr&#39;</span> <span class="p">:</span> <span class="n">paramstr</span><span class="p">,</span>
+                   <span class="s1">&#39;tlmsid&#39;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TLMSID&#39;</span><span class="p">),</span>
+                   <span class="s1">&#39;msid&#39;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;MSID&#39;</span><span class="p">),</span>
+                   <span class="s1">&#39;vcdu&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">vcdu</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span> <span class="c1"># ignore 2nd part of vcdu field</span>
+                   <span class="s1">&#39;step&#39;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;STEP&#39;</span><span class="p">),</span>
+                   <span class="s1">&#39;scs&#39;</span><span class="p">:</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SCS&#39;</span><span class="p">),</span>
+                   <span class="p">})</span>
+    <span class="k">return</span> <span class="n">bs</span></div>
+
+<div class="viewcode-block" id="read_mm"><a class="viewcode-back" href="../../index.html#Ska.ParseCM.read_mm">[docs]</a><span class="k">def</span> <span class="nf">read_mm</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read maneuver summary file.</span>
+
+<span class="sd">    :param filename: Maneuver summary file name</span>
+<span class="sd">    :rtype: list of dict for each maneuver</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Parse blocks that look like this:</span>
+    <span class="c1">#   INITIAL ID:  GG27700</span>
+    <span class="c1">#                     INITIAL ATTITUDE</span>
+    <span class="c1">#      START TIME (GMT):  2008:046:05:15:43.038</span>
+    <span class="c1">#             RA (deg):    160.00000000</span>
+    <span class="c1">#            DEC (deg):     37.00000000</span>
+    <span class="c1">#           ROLL (deg):    152.30346378</span>
+    <span class="c1">#        Dev. from</span>
+    <span class="c1">#      Opt. Roll (deg):      0.59125433</span>
+    <span class="c1">#      Sun Angle (deg):    153.65546454</span>
+    <span class="c1">#    Quaternion:     -0.234681605818   -0.893582206471   -0.277032106484    0.263985977177</span>
+    <span class="c1">#</span>
+    <span class="c1">#   FINAL ID:    T_X7800</span>
+    <span class="c1">#                       FINAL ATTITUDE</span>
+    <span class="c1">#      STOP TIME (GMT):   2008:046:06:05:20.797</span>
+    <span class="c1">#             RA (deg):    140.80000000</span>
+    <span class="c1">#            DEC (deg):    -12.20000000</span>
+    <span class="c1">#           ROLL (deg):    343.75391110</span>
+    <span class="c1">#        Dev. from</span>
+    <span class="c1">#      Opt. Roll (deg):      0.00715175</span>
+    <span class="c1">#      Sun Angle (deg):    153.86358479</span>
+    <span class="c1">#    Quaternion:     -0.146233211265   -0.097069667972    0.932362059387    0.316060623455</span>
+
+    <span class="n">mm_text</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="n">mm_blocks</span> <span class="o">=</span> <span class="n">mm_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;MANEUVER DATA SUMMARY</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">manvr_blocks</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mm_blocks</span> <span class="k">if</span> <span class="s2">&quot;INITIAL&quot;</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">or</span> <span class="s2">&quot;FINAL&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="p">]</span>
+
+    <span class="n">int_obsid</span> <span class="o">=</span> <span class="s1">&#39;IN_IA&#39;</span>
+
+    <span class="n">att_re_dict</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;obsid&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;ID:\s+(\S+)\S\S&quot;</span><span class="p">),</span>
+                    <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;TIME\s*\(GMT\):\s+(\S+)&quot;</span><span class="p">),</span>
+                    <span class="s1">&#39;ra&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;RA\s*\(deg\):\s+(\S+)&quot;</span><span class="p">),</span>
+                    <span class="s1">&#39;dec&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;DEC\s*\(deg\):\s+(\S+)&quot;</span><span class="p">),</span>
+                    <span class="s1">&#39;roll&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;ROLL\s*\(deg\):\s+(\S+)&quot;</span><span class="p">),</span>
+                    <span class="s1">&#39;sun_angle&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Sun Angle\s*\S+\s+(\S+)&quot;</span><span class="p">),</span>
+                    <span class="s1">&#39;quat_string&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Quaternion:\s*((\S+)\s+(\S+)\s+(\S+)\s+(\S+))&quot;</span><span class="p">),</span>
+                    <span class="p">}</span>
+
+    <span class="n">output_re_dict</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;duration&#39;</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Duration\s*\(sec\):\s+(\S+)&quot;</span><span class="p">),</span>
+                       <span class="s1">&#39;angle&#39;</span><span class="p">:</span>  <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;Maneuver Angle\s*\(deg\):\s+(\S+)&quot;</span><span class="p">),</span>
+                       <span class="p">}</span>
+
+    <span class="n">manvr_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">manvr_blocks</span><span class="p">:</span>
+        <span class="n">manvr</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="n">para</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">split</span><span class="p">(</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span> <span class="p">)</span>
+        <span class="n">att_check</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;ATTITUDE&quot;</span><span class="p">)</span>
+        <span class="n">att_chunks</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">att_check</span><span class="o">.</span><span class="n">search</span><span class="p">,</span> <span class="n">para</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">att_chunks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Maneuver Summary has too many attitudes in section&quot;</span><span class="p">)</span>
+        <span class="n">outdata_check</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;OUTPUT DATA&quot;</span><span class="p">)</span>
+        <span class="n">outdata_match</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span> <span class="n">outdata_check</span><span class="o">.</span><span class="n">search</span><span class="p">,</span> <span class="n">para</span><span class="p">))</span>
+        <span class="n">output_data</span> <span class="o">=</span> <span class="n">outdata_match</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">att_text</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;initial&#39;</span><span class="p">:</span> <span class="n">att_chunks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                     <span class="s1">&#39;final&#39;</span><span class="p">:</span> <span class="n">att_chunks</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">att</span> <span class="ow">in</span> <span class="n">att_text</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">manvr</span><span class="p">[</span><span class="n">att</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">keytype</span> <span class="ow">in</span> <span class="n">att_re_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">att_re_dict</span><span class="p">[</span><span class="n">keytype</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">att_text</span><span class="p">[</span><span class="n">att</span><span class="p">])</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">keytype</span> <span class="o">==</span> <span class="s1">&#39;obsid&#39;</span><span class="p">):</span>
+                        <span class="c1"># use intermediate attitude label for missing</span>
+                        <span class="n">manvr</span><span class="p">[</span><span class="n">att</span><span class="p">][</span><span class="n">keytype</span><span class="p">]</span> <span class="o">=</span> <span class="n">int_obsid</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Maneuver has no obsid&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">att_re_dict</span><span class="p">[</span><span class="n">keytype</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">att_text</span><span class="p">[</span><span class="n">att</span><span class="p">])</span>
+                    <span class="n">manvr</span><span class="p">[</span><span class="n">att</span><span class="p">][</span><span class="n">keytype</span><span class="p">]</span> <span class="o">=</span> <span class="n">_coerce_type</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">keytype</span> <span class="o">==</span> <span class="s1">&#39;quat_string&#39;</span><span class="p">):</span>
+                    <span class="n">manvr</span><span class="p">[</span><span class="n">att</span><span class="p">][</span><span class="s1">&#39;quat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">1</span><span class="p">:]]</span>
+
+        <span class="k">for</span> <span class="n">keytype</span> <span class="ow">in</span> <span class="n">output_re_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">manvr</span><span class="p">[</span><span class="n">keytype</span><span class="p">]</span> <span class="o">=</span> <span class="n">_coerce_type</span><span class="p">(</span><span class="n">output_re_dict</span><span class="p">[</span><span class="n">keytype</span><span class="p">]</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">output_data</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;tstart&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Chandra</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;initial&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">secs</span>
+        <span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;tstop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Chandra</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;final&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">secs</span>
+
+        <span class="c1"># &quot;correct&quot; manvr start times to line up with AOMANUVR in backstop</span>
+        <span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;tstart&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">10</span>
+        <span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;initial&#39;</span><span class="p">][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Chandra</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">DateTime</span><span class="p">(</span><span class="n">manvr</span><span class="p">[</span><span class="s1">&#39;tstart&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">date</span>
+        <span class="n">manvr_list</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">manvr</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">manvr_list</span></div>
+
+
+
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+
+
+<form action="../../search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right"> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Tom Aldcroft.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.1.2. &nbsp;
+  </p>
+</footer>
+  </body>
+</html>

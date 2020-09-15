@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ska.ParseCM &#8212; Ska.ParseCM 3.3.5.dev7+ga3309ae documentation</title>
+    <link rel="stylesheet" href="_static/bootstrap-astropy.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script type="text/javascript" src="_static/sidebar.js"></script>
+    <script type="text/javascript" src="_static/copybutton.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600' rel='stylesheet' type='text/css'/>
+
+  </head><body>
+<div class="topbar">
+  <a class="brand" title="Documentation Home" href="#"><span id="logotext1">Ska! </span><span id="logotext2">Ska</span><span id="logotext3">.ParseCM</span></a>
+  <ul>
+    
+    <li><a class="home" title="Homepage" href="">
+        <span id="logotext1"></span><span id="logotext2"></span>
+    </a></li>
+    <li><a title="General Index" href="genindex.html">Index</a></li>
+    <li><a title="Module Index" href="py-modindex.html">Modules</a></li>
+    <li>
+      
+      
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+      
+    </li>
+  </ul>
+</div>
+
+<div class="related">
+    <h3>Navigation</h3>
+    <ul>
+      <li>
+	<a href="#">Ska.ParseCM 3.3.5.dev7+ga3309ae documentation</a>
+	 &#187;
+      </li>
+      
+       
+    </ul>
+</div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-Ska.ParseCM">
+<span id="ska-parsecm"></span><h1><a class="reference internal" href="#module-Ska.ParseCM" title="Ska.ParseCM"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Ska.ParseCM</span></code></a><a class="headerlink" href="#module-Ska.ParseCM" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="Ska.ParseCM.parse_params">
+<code class="sig-prename descclassname">Ska.ParseCM.</code><code class="sig-name descname">parse_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">paramstr</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Ska/ParseCM.html#parse_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Ska.ParseCM.parse_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse parameters key1=val1,key2=val2,… from <code class="docutils literal notranslate"><span class="pre">paramstr</span></code></p>
+<p>Parameter values are cast to the first type (int, float, or str) that
+succeeds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>paramstr</strong> – Comma separated string of key=val pairs</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>dict of key=val pairs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Ska.ParseCM.read_backstop">
+<code class="sig-prename descclassname">Ska.ParseCM.</code><code class="sig-name descname">read_backstop</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Ska/ParseCM.html#read_backstop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Ska.ParseCM.read_backstop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read commands from backstop file.</p>
+<p>Create dict with keys as follows for each command.  <code class="docutils literal notranslate"><span class="pre">paramstr</span></code> is the
+actual string with comma-separated parameters and <code class="docutils literal notranslate"><span class="pre">params</span></code> is the
+corresponding dict of key=val pairs.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 60%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>date</p></td>
+<td><p>char</p></td>
+</tr>
+<tr class="row-even"><td><p>time</p></td>
+<td><p>float</p></td>
+</tr>
+<tr class="row-odd"><td><p>cmd</p></td>
+<td><p>char</p></td>
+</tr>
+<tr class="row-even"><td><p>params</p></td>
+<td><p>dict</p></td>
+</tr>
+<tr class="row-odd"><td><p>paramstr</p></td>
+<td><p>char</p></td>
+</tr>
+<tr class="row-even"><td><p>tlmsid</p></td>
+<td><p>char</p></td>
+</tr>
+<tr class="row-odd"><td><p>msid</p></td>
+<td><p>char</p></td>
+</tr>
+<tr class="row-even"><td><p>vcdu</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-odd"><td><p>step</p></td>
+<td><p>int</p></td>
+</tr>
+<tr class="row-even"><td><p>scs</p></td>
+<td><p>int</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – Backstop file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of dict for each command</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="Ska.ParseCM.read_mm">
+<code class="sig-prename descclassname">Ska.ParseCM.</code><code class="sig-name descname">read_mm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/Ska/ParseCM.html#read_mm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#Ska.ParseCM.read_mm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read maneuver summary file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> – Maneuver summary file name</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of dict for each maneuver</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
+<ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">Ska.ParseCM</span></code></a></li>
+</ul>
+
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<form action="search.html" method="get">
+  <input type="text" name="q" placeholder="Search" />
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+<footer class="footer">
+  <p class="pull-right">
+    <a href="_sources/index.rst.txt"
+       rel="nofollow">Page Source</a> &nbsp;
+    <a href="#">Back to Top</a></p>
+  <p>
+    &copy; Copyright 2020, Tom Aldcroft.<br/>
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.1.2. &nbsp;
+  </p>
+</footer>
+  </body>
+</html>
