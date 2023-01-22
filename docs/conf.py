@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Ska.ParseCM documentation build configuration file, created by
+# ska_parsecm documentation build configuration file, created by
 # sphinx-quickstart on Tue May 19 15:46:11 2020.
 #
 # This file is execfile()d with the current directory set to its
@@ -20,7 +20,7 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-from Ska.ParseCM import __version__
+from ska_parsecm import __version__
 
 # -- General configuration ------------------------------------------------
 
@@ -49,7 +49,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Ska.ParseCM'
+project = 'ska_parsecm'
 copyright = '2020, Tom Aldcroft'
 author = 'Tom Aldcroft'
 
@@ -153,7 +153,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'SkaParseCM.tex', 'Ska.ParseCM Documentation',
+    (master_doc, 'SkaParseCM.tex', 'ska_parsecm Documentation',
      'Tom Aldcroft', 'manual'),
 ]
 
@@ -163,7 +163,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'chandratime', 'Ska.ParseCM Documentation',
+    (master_doc, 'chandratime', 'ska_parsecm Documentation',
      [author], 1)
 ]
 
@@ -174,7 +174,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'SkaParseCM', 'Ska.ParseCM Documentation',
+    (master_doc, 'SkaParseCM', 'ska_parsecm Documentation',
      author, 'SkaParseCM', 'One line description of project.',
      'Miscellaneous'),
 ]

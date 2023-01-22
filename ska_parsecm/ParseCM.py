@@ -5,11 +5,7 @@ import warnings
 
 # Warn about deprecation but use FutureWarning so it actually shows up (since
 # DeprecationWarning is ignored by default)
-warnings.warn('Ska.ParseCM is deprecated, use parse_cm instead', FutureWarning)
-
-import ska_helpers
-
-__version__ = ska_helpers.get_version(__name__)
+warnings.warn('ska_parsecm is deprecated, use parse_cm instead', FutureWarning)
 
 
 def _coerce_type(val):
