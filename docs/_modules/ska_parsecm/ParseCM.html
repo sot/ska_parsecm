@@ -4,16 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ska.ParseCM &#8212; Ska.ParseCM 3.4.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/bootstrap-astropy.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ska_parsecm.ParseCM &#8212; ska_parsecm 4.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-astropy.css" />
     
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../_static/copybutton.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -47,7 +46,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../index.html">Ska.ParseCM 3.4.0 documentation</a>
+	<a href="../../index.html">ska_parsecm 4.0.0 documentation</a>
 	 &#187;
       </li>
       <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -62,7 +61,7 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for Ska.ParseCM</h1><div class="highlight"><pre>
+  <h1>Source code for ska_parsecm.ParseCM</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">Chandra.Time</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">six.moves</span> <span class="kn">import</span> <span class="nb">filter</span>
@@ -70,11 +69,7 @@
 
 <span class="c1"># Warn about deprecation but use FutureWarning so it actually shows up (since</span>
 <span class="c1"># DeprecationWarning is ignored by default)</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Ska.ParseCM is deprecated, use parse_cm instead&#39;</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
-
-<span class="kn">import</span> <span class="nn">ska_helpers</span>
-
-<span class="n">__version__</span> <span class="o">=</span> <span class="n">ska_helpers</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;ska_parsecm is deprecated, use parse_cm instead&#39;</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_coerce_type</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
@@ -90,7 +85,7 @@
             <span class="n">val</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">val</span>
 
-<div class="viewcode-block" id="parse_params"><a class="viewcode-back" href="../../index.html#Ska.ParseCM.parse_params">[docs]</a><span class="k">def</span> <span class="nf">parse_params</span><span class="p">(</span><span class="n">paramstr</span><span class="p">):</span>
+<div class="viewcode-block" id="parse_params"><a class="viewcode-back" href="../../index.html#ska_parsecm.ParseCM.parse_params">[docs]</a><span class="k">def</span> <span class="nf">parse_params</span><span class="p">(</span><span class="n">paramstr</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse parameters key1=val1,key2=val2,... from ``paramstr``</span>
 
@@ -111,7 +106,7 @@
 
     <span class="k">return</span> <span class="n">params</span></div>
 
-<div class="viewcode-block" id="read_backstop"><a class="viewcode-back" href="../../index.html#Ska.ParseCM.read_backstop">[docs]</a><span class="k">def</span> <span class="nf">read_backstop</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="read_backstop"><a class="viewcode-back" href="../../index.html#ska_parsecm.ParseCM.read_backstop">[docs]</a><span class="k">def</span> <span class="nf">read_backstop</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read commands from backstop file.</span>
 
@@ -152,7 +147,7 @@
                    <span class="p">})</span>
     <span class="k">return</span> <span class="n">bs</span></div>
 
-<div class="viewcode-block" id="read_mm"><a class="viewcode-back" href="../../index.html#Ska.ParseCM.read_mm">[docs]</a><span class="k">def</span> <span class="nf">read_mm</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="read_mm"><a class="viewcode-back" href="../../index.html#ska_parsecm.ParseCM.read_mm">[docs]</a><span class="k">def</span> <span class="nf">read_mm</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read maneuver summary file.</span>
 
@@ -273,7 +268,7 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Tom Aldcroft.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 3.1.2. &nbsp;
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.2.0. &nbsp;
   </p>
 </footer>
   </body>
