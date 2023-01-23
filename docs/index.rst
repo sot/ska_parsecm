@@ -1,5 +1,5 @@
-:mod:`Ska.ParseCM`
+:mod:`ska_parsecm`
 ========================
 
-.. automodule:: Ska.ParseCM
+.. automodule:: ska_parsecm.ParseCM
    :members:
