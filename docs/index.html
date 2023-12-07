@@ -1,19 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ska_parsecm &#8212; ska_parsecm 4.0.0 documentation</title>
+    <title>ska_parsecm &#8212; ska_parsecm 4.0.1.dev3+gdf0d5b6 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/bootstrap-astropy.css" />
     
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="_static/sidebar.js"></script>
     <script type="text/javascript" src="_static/copybutton.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -47,7 +46,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="#">ska_parsecm 4.0.0 documentation</a>
+	<a href="#">ska_parsecm 4.0.1.dev3+gdf0d5b6 documentation</a>
 	 &#187;
       </li>
       
@@ -61,19 +60,24 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="module-ska_parsecm.ParseCM">
-<span id="ska-parsecm"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">ska_parsecm</span></code><a class="headerlink" href="#module-ska_parsecm.ParseCM" title="Permalink to this headline">¶</a></h1>
-<dl class="py function">
+  <section id="ska-parsecm">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">ska_parsecm</span></code><a class="headerlink" href="#ska-parsecm" title="Permalink to this heading">¶</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>the ska_parsecm package is <strong>discontinued and no longer supported</strong>.
+Instead use <cite>parse_cm &lt;https://sot.github.io/parse_cm/&gt;</cite>.</p>
+</div>
+<span class="target" id="module-ska_parsecm.ParseCM"></span><dl class="py function">
 <dt class="sig sig-object py" id="ska_parsecm.ParseCM.parse_params">
 <span class="sig-prename descclassname"><span class="pre">ska_parsecm.ParseCM.</span></span><span class="sig-name descname"><span class="pre">parse_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paramstr</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ska_parsecm/ParseCM.html#parse_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ska_parsecm.ParseCM.parse_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse parameters key1=val1,key2=val2,… from <code class="docutils literal notranslate"><span class="pre">paramstr</span></code></p>
 <p>Parameter values are cast to the first type (int, float, or str) that
 succeeds.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>paramstr</strong> – Comma separated string of key=val pairs</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>dict of key=val pairs</p>
 </dd>
 </dl>
@@ -87,10 +91,6 @@ succeeds.</p>
 actual string with comma-separated parameters and <code class="docutils literal notranslate"><span class="pre">params</span></code> is the
 corresponding dict of key=val pairs.</p>
 <table class="docutils align-default">
-<colgroup>
-<col style="width: 60%" />
-<col style="width: 40%" />
-</colgroup>
 <tbody>
 <tr class="row-odd"><td><p>date</p></td>
 <td><p>char</p></td>
@@ -125,10 +125,10 @@ corresponding dict of key=val pairs.</p>
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – Backstop file name</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of dict for each command</p>
 </dd>
 </dl>
@@ -139,10 +139,10 @@ corresponding dict of key=val pairs.</p>
 <span class="sig-prename descclassname"><span class="pre">ska_parsecm.ParseCM.</span></span><span class="sig-name descname"><span class="pre">read_mm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ska_parsecm/ParseCM.html#read_mm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ska_parsecm.ParseCM.read_mm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read maneuver summary file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>filename</strong> – Maneuver summary file name</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>list of dict for each maneuver</p>
 </dd>
 </dl>
@@ -158,7 +158,12 @@ corresponding dict of key=val pairs.</p>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper"><h3>Page Contents</h3>
 <ul>
-<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ska_parsecm</span></code></a></li>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ska_parsecm</span></code></a><ul>
+<li><a class="reference internal" href="#ska_parsecm.ParseCM.parse_params"><code class="docutils literal notranslate"><span class="pre">parse_params()</span></code></a></li>
+<li><a class="reference internal" href="#ska_parsecm.ParseCM.read_backstop"><code class="docutils literal notranslate"><span class="pre">read_backstop()</span></code></a></li>
+<li><a class="reference internal" href="#ska_parsecm.ParseCM.read_mm"><code class="docutils literal notranslate"><span class="pre">read_mm()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
 
@@ -185,7 +190,7 @@ corresponding dict of key=val pairs.</p>
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Tom Aldcroft.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.2.0. &nbsp;
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 6.1.3. &nbsp;
   </p>
 </footer>
   </body>

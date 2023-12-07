@@ -1,18 +1,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ska_parsecm.ParseCM &#8212; ska_parsecm 4.0.0 documentation</title>
+    <title>ska_parsecm.ParseCM &#8212; ska_parsecm 4.0.1.dev3+gdf0d5b6 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/bootstrap-astropy.css" />
     
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
     <script type="text/javascript" src="../../_static/sidebar.js"></script>
     <script type="text/javascript" src="../../_static/copybutton.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -46,7 +45,7 @@
     <h3>Navigation</h3>
     <ul>
       <li>
-	<a href="../../index.html">ska_parsecm 4.0.0 documentation</a>
+	<a href="../../index.html">ska_parsecm 4.0.1.dev3+gdf0d5b6 documentation</a>
 	 &#187;
       </li>
       <li><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
@@ -73,7 +72,7 @@
 
 
 <span class="k">def</span> <span class="nf">_coerce_type</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Coerce the supplied ``val`` (typically a string) into an int or float if</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coerce the supplied ``val`` (typically a string) into an int or float if</span>
 <span class="sd">    possible, otherwise as a string.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
@@ -86,7 +85,7 @@
     <span class="k">return</span> <span class="n">val</span>
 
 <div class="viewcode-block" id="parse_params"><a class="viewcode-back" href="../../index.html#ska_parsecm.ParseCM.parse_params">[docs]</a><span class="k">def</span> <span class="nf">parse_params</span><span class="p">(</span><span class="n">paramstr</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse parameters key1=val1,key2=val2,... from ``paramstr``</span>
 
 <span class="sd">    Parameter values are cast to the first type (int, float, or str) that</span>
@@ -107,7 +106,7 @@
     <span class="k">return</span> <span class="n">params</span></div>
 
 <div class="viewcode-block" id="read_backstop"><a class="viewcode-back" href="../../index.html#ska_parsecm.ParseCM.read_backstop">[docs]</a><span class="k">def</span> <span class="nf">read_backstop</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read commands from backstop file.</span>
 
 <span class="sd">    Create dict with keys as follows for each command.  ``paramstr`` is the</span>
@@ -148,7 +147,7 @@
     <span class="k">return</span> <span class="n">bs</span></div>
 
 <div class="viewcode-block" id="read_mm"><a class="viewcode-back" href="../../index.html#ska_parsecm.ParseCM.read_mm">[docs]</a><span class="k">def</span> <span class="nf">read_mm</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read maneuver summary file.</span>
 
 <span class="sd">    :param filename: Maneuver summary file name</span>
@@ -268,7 +267,7 @@
     <a href="#">Back to Top</a></p>
   <p>
     &copy; Copyright 2020, Tom Aldcroft.<br/>
-    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 4.2.0. &nbsp;
+    Created using <a href="http://www.sphinx-doc.org/en/stable/">Sphinx</a> 6.1.3. &nbsp;
   </p>
 </footer>
   </body>
